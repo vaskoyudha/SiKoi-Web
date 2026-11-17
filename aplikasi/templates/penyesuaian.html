@@ -1,0 +1,70 @@
+<p class="keterangan-halaman">
+    Penyesuaian dilakukan sekali di akhir bulan, setelah stok opname.
+    Tujuannya supaya laba yang tampil adalah laba yang sebenarnya.
+</p>
+
+<div class="kartu">
+    <h2>1. Pemakaian pakan</h2>
+
+    <p class="lemah" style="font-size:13px;">
+        Pakan dibeli sebagai persediaan, lalu berkurang setiap hari dipakai.
+        Catat total pemakaian sebulan di sini.<br>
+        Stok pakan sekarang: <strong>{{ stok_pakan }} kg</strong>,
+        HPP <strong>{{ rupiah(hpp_pakan) }} / kg</strong>.
+    </p>
+
+    <form method="post">
+        <input type="hidden" name="jenis" value="pakan">
+
+        <div class="baris-form">
+            <div>
+                <label for="tanggal">Tanggal</label>
+                <input type="date" name="tanggal" id="tanggal"
+                       value="{{ akhir_bulan }}" required>
+            </div>
+
+            <div>
+                <label for="kg">Pakan terpakai (kg)</label>
+                <input type="number" name="kg" id="kg" min="1" max="{{ stok_pakan }}"
+                       placeholder="60" required>
+            </div>
+        </div>
+
+        <button type="submit" class="tombol utama">Catat pemakaian pakan</button>
+    </form>
+</div>
+
+<div class="kartu">
+    <h2>2. Penyusutan peralatan</h2>
+
+    <p class="lemah" style="font-size:13px;">
+        Peralatan kolam Rp1.800.000 disusutkan selama 3 tahun (36 bulan),
+        jadi sekitar Rp50.000 per bulan.
+    </p>
+
+    <form method="post">
+        <input type="hidden" name="jenis" value="penyusutan">
+
+        <div class="baris-form">
+            <div>
+                <label for="tanggal2">Tanggal</label>
+                <input type="date" name="tanggal" id="tanggal2"
+                       value="{{ akhir_bulan }}" required>
+            </div>
+
+            <div>
+                <label for="nilai">Nilai penyusutan (Rp)</label>
+                <input type="number" name="nilai" id="nilai"
+                       value="50000" step="1000" required>
+            </div>
+        </div>
+
+        <button type="submit" class="tombol utama">Catat penyusutan</button>
+    </form>
+</div>
+
+<div class="peringatan">
+    Ikan yang mati tidak dicatat di sini, tetapi di halaman
+    <a href="/jurnal">Jurnal</a> bagian "Stok opname",
+    karena harus mengurangi jumlah stok per ukuran.
+</div>

@@ -1,0 +1,165 @@
+<p class="keterangan-halaman">
+    Semua angka dihitung dari jurnal. Tidak ada yang diketik manual,
+    sehingga laporan selalu sama dengan transaksi yang tercatat.
+</p>
+
+{# ---------- 1. Laba rugi ---------- #}
+<div class="kartu">
+    <h2>Laporan laba rugi</h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <td>Penjualan koi</td>
+                <td class="angka">{{ angka(laba.penjualan_koi) }}</td>
+            </tr>
+            <tr>
+                <td>Harga pokok penjualan</td>
+                <td class="angka">({{ angka(laba.hpp) }})</td>
+            </tr>
+            <tr class="total">
+                <td>Laba kotor</td>
+                <td class="angka">{{ akun(laba.laba_kotor) }}</td>
+            </tr>
+
+            <tr>
+                <td>Pendapatan ongkos kirim</td>
+                <td class="angka">{{ angka(laba.pendapatan_ongkir) }}</td>
+            </tr>
+
+            {% for b in laba.rincian_beban %}
+                {% if b.debit %}
+                    <tr>
+                        <td>{{ b.nama }}</td>
+                        <td class="angka">({{ angka(b.debit) }})</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+            <tr class="total">
+                <td>Total beban</td>
+                <td class="angka">({{ angka(laba.beban) }})</td>
+            </tr>
+
+            <tr class="total">
+                <td>Laba bersih</td>
+                <td class="angka">{{ akun(laba.laba_bersih) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{# ---------- 2. Perubahan modal ---------- #}
+<div class="kartu">
+    <h2>Laporan perubahan modal</h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <td>Modal awal (1 Okt 2026)</td>
+                <td class="angka">{{ angka(modal_awal) }}</td>
+            </tr>
+            <tr>
+                <td>Setoran modal tambahan</td>
+                <td class="angka">{{ angka(modal_tambahan) }}</td>
+            </tr>
+            <tr>
+                <td>Laba bersih</td>
+                <td class="angka">{{ akun(laba.laba_bersih) }}</td>
+            </tr>
+            <tr>
+                <td>Prive</td>
+                <td class="angka">0</td>
+            </tr>
+            <tr class="total">
+                <td>Modal akhir</td>
+                <td class="angka">{{ angka(modal_akhir) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{# ---------- 3. Posisi keuangan ---------- #}
+<div class="kartu">
+    <h2>Laporan posisi keuangan</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Keterangan</th>
+                <th class="angka">Jumlah</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="2" class="tebal">ASET LANCAR</td></tr>
+            {% for a in aset_lancar %}
+                {% if a.nilai %}
+                    <tr>
+                        <td style="padding-left:24px;">{{ a.nama }}</td>
+                        <td class="angka">{{ angka(a.nilai) }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            <tr class="total">
+                <td>Total aset lancar</td>
+                <td class="angka">{{ angka(total_aset_lancar) }}</td>
+            </tr>
+
+            <tr><td colspan="2" class="tebal" style="padding-top:20px;">ASET TETAP</td></tr>
+            {% for a in aset_tetap %}
+                {% if a.nilai %}
+                    <tr>
+                        <td style="padding-left:24px;">{{ a.nama }}</td>
+                        <td class="angka">
+                            {% if a.nilai < 0 %}({{ angka(-a.nilai) }})
+                            {% else %}{{ angka(a.nilai) }}{% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            <tr class="total">
+                <td>Total aset tetap</td>
+                <td class="angka">{{ angka(total_aset_tetap) }}</td>
+            </tr>
+
+            <tr class="total">
+                <td>TOTAL ASET</td>
+                <td class="angka">{{ angka(total_aset) }}</td>
+            </tr>
+
+            <tr><td colspan="2" class="tebal" style="padding-top:20px;">KEWAJIBAN</td></tr>
+            {% if total_kewajiban == 0 %}
+                <tr>
+                    <td style="padding-left:24px;" class="lemah">Tidak ada utang (semua tunai)</td>
+                    <td class="angka">0</td>
+                </tr>
+            {% else %}
+                {% for k in kewajiban %}
+                    <tr>
+                        <td style="padding-left:24px;">{{ k.nama }}</td>
+                        <td class="angka">{{ angka(k.nilai) }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+
+            <tr><td colspan="2" class="tebal" style="padding-top:20px;">MODAL</td></tr>
+            <tr>
+                <td style="padding-left:24px;">Modal kelompok</td>
+                <td class="angka">{{ angka(modal_akhir) }}</td>
+            </tr>
+
+            <tr class="total">
+                <td>TOTAL KEWAJIBAN + MODAL</td>
+                <td class="angka">{{ angka(total_kewajiban + modal_akhir) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top:14px;">
+        {% if seimbang %}
+            <span class="seimbang">&#10003; Neraca seimbang</span>
+        {% else %}
+            <span class="tidak-seimbang">&#10007; Neraca tidak seimbang</span>
+        {% endif %}
+    </p>
+</div>

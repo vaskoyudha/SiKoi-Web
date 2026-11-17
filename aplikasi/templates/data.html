@@ -1,0 +1,150 @@
+<div class="kartu">
+    <h2>Barang dan persediaan</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Kode</th>
+                <th>Nama</th>
+                <th class="angka">Stok</th>
+                <th class="angka">HPP</th>
+                <th class="angka">Harga jual</th>
+                <th class="angka">Minimum</th>
+                <th class="angka">Berat</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in barang %}
+                <tr>
+                    <td class="lemah">{{ b.kode }}</td>
+                    <td>{{ b.nama }}</td>
+                    <td class="angka">{{ b.stok }} {{ b.satuan }}</td>
+                    <td class="angka">{{ angka(b.hpp) }}</td>
+                    <td class="angka">{{ angka(b.harga_jual) if b.harga_jual else '-' }}</td>
+                    <td class="angka lemah">{{ b.stok_minimum }}</td>
+                    <td class="angka lemah">{{ desimal(b.berat) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <details style="margin-top:18px;">
+        <summary style="cursor:pointer; font-weight:600; font-size:14px;">
+            + Tambah ukuran ikan baru
+        </summary>
+
+        <form method="post" style="margin-top:14px;">
+            <input type="hidden" name="aksi" value="tambah_barang">
+
+            <div class="baris-form">
+                <div>
+                    <label>Kode</label>
+                    <input type="text" name="kode" placeholder="KOI-35" required>
+                </div>
+                <div>
+                    <label>Nama</label>
+                    <input type="text" name="nama" placeholder="Koi Kohiku 35 cm" required>
+                </div>
+                <div>
+                    <label>HPP awal</label>
+                    <input type="number" name="hpp" placeholder="40000" required>
+                </div>
+                <div>
+                    <label>Harga jual acuan</label>
+                    <input type="number" name="harga_jual" placeholder="100000" required>
+                </div>
+                <div>
+                    <label>Stok minimum</label>
+                    <input type="number" name="stok_minimum" placeholder="15" required>
+                </div>
+                <div>
+                    <label>Berat / ekor (kg)</label>
+                    <input type="number" step="0.01" name="berat" placeholder="0.45" required>
+                </div>
+            </div>
+
+            <button type="submit" class="tombol">Tambah barang</button>
+        </form>
+    </details>
+</div>
+
+<div class="kartu">
+    <h2>Pelanggan</h2>
+
+    <table>
+        <thead>
+            <tr><th>Kode</th><th>Nama</th><th>Jenis</th></tr>
+        </thead>
+        <tbody>
+            {% for p in pelanggan %}
+                <tr>
+                    <td class="lemah">{{ p.kode }}</td>
+                    <td>{{ p.nama }}</td>
+                    <td class="lemah">{{ p.jenis }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <details style="margin-top:18px;">
+        <summary style="cursor:pointer; font-weight:600; font-size:14px;">
+            + Tambah pelanggan
+        </summary>
+
+        <form method="post" style="margin-top:14px;">
+            <input type="hidden" name="aksi" value="tambah_pelanggan">
+
+            <div class="baris-form">
+                <div>
+                    <label>Nama pelanggan</label>
+                    <input type="text" name="nama" required>
+                </div>
+                <div>
+                    <label>Jenis</label>
+                    <input type="text" name="jenis" value="Customer">
+                </div>
+            </div>
+
+            <button type="submit" class="tombol">Tambah pelanggan</button>
+        </form>
+    </details>
+</div>
+
+<div class="kartu">
+    <h2>Pemasok</h2>
+
+    <table>
+        <thead>
+            <tr><th>Kode</th><th>Nama</th><th>Jenis</th></tr>
+        </thead>
+        <tbody>
+            {% for p in pemasok %}
+                <tr>
+                    <td class="lemah">{{ p.kode }}</td>
+                    <td>{{ p.nama }}</td>
+                    <td class="lemah">{{ p.jenis }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="kartu">
+    <h2>Daftar akun</h2>
+
+    <table>
+        <thead>
+            <tr><th>No</th><th>Nama akun</th><th>Kelompok</th><th>Saldo normal</th></tr>
+        </thead>
+        <tbody>
+            {% for a in akun %}
+                <tr>
+                    <td class="lemah">{{ a.no_akun }}</td>
+                    <td>{{ a.nama }}</td>
+                    <td class="lemah">{{ a.kelompok }}</td>
+                    <td class="lemah">{{ a.saldo_normal }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

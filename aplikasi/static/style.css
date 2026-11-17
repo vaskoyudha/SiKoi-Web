@@ -1,0 +1,465 @@
+/* ============================================================
+   style.css  --  Semua tampilan SiKoi
+   ============================================================
+   Disusun dari atas ke bawah:
+   1. Dasar halaman
+   2. Header dan menu
+   3. Kartu dan tabel
+   4. Tombol dan formulir
+   5. Halaman login
+   ============================================================ */
+
+/* ---------- 1. DASAR HALAMAN ---------- */
+
+:root {
+    --tinta: #22201d;          /* warna teks utama */
+    --tinta-lemah: #6d665c;    /* teks keterangan */
+    --garis: #e0d9cd;          /* garis tabel */
+    --kertas: #faf7f1;         /* latar halaman */
+    --putih: #ffffff;
+    --aksen: #b4552d;          /* oranye koi */
+    --hijau: #2f6b4f;
+    --merah: #a83232;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--kertas);
+    color: var(--tinta);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+a {
+    color: var(--aksen);
+}
+
+/* ---------- 2. HEADER DAN MENU ---------- */
+
+.header {
+    background: var(--putih);
+    border-bottom: 1px solid var(--garis);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.header .logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--aksen);
+    padding: 14px 0;
+}
+
+.menu {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.menu a {
+    display: block;
+    padding: 14px 12px;
+    text-decoration: none;
+    color: var(--tinta-lemah);
+    font-size: 14px;
+    border-bottom: 2px solid transparent;
+}
+
+.menu a:hover {
+    color: var(--tinta);
+}
+
+.menu a.aktif {
+    color: var(--tinta);
+    font-weight: 600;
+    border-bottom-color: var(--aksen);
+}
+
+.header .pengguna {
+    font-size: 13px;
+    color: var(--tinta-lemah);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.badge {
+    background: #efe8dc;
+    color: #5d5346;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.isi {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+}
+
+.judul-halaman {
+    margin: 0 0 4px;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.keterangan-halaman {
+    margin: 0 0 24px;
+    color: var(--tinta-lemah);
+    font-size: 14px;
+}
+
+/* ---------- 3. KARTU DAN TABEL ---------- */
+
+.kartu {
+    background: var(--putih);
+    border: 1px solid var(--garis);
+    border-radius: 6px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+}
+
+.kartu h2 {
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--tinta-lemah);
+}
+
+.grid-angka {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.kotak-angka {
+    background: var(--putih);
+    border: 1px solid var(--garis);
+    border-radius: 6px;
+    padding: 16px 18px;
+}
+
+.kotak-angka .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--tinta-lemah);
+    margin-bottom: 6px;
+}
+
+.kotak-angka .nilai {
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.5px;
+}
+
+.kotak-angka .catatan {
+    font-size: 12px;
+    color: var(--tinta-lemah);
+    margin-top: 2px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th {
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--tinta-lemah);
+    font-weight: 600;
+    border-bottom: 1px solid var(--garis);
+    padding: 8px 10px;
+}
+
+td {
+    padding: 9px 10px;
+    border-bottom: 1px solid #f0ebe2;
+    vertical-align: top;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.angka {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.kanan {
+    text-align: right;
+}
+
+.tebal {
+    font-weight: 600;
+}
+
+.total td {
+    border-top: 2px solid var(--garis);
+    font-weight: 700;
+    padding-top: 12px;
+}
+
+.lemah {
+    color: var(--tinta-lemah);
+}
+
+.seimbang {
+    color: var(--hijau);
+    font-weight: 600;
+}
+
+.tidak-seimbang {
+    color: var(--merah);
+    font-weight: 600;
+}
+
+/* Pesan sukses / error */
+.pesan {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    border-left: 4px solid;
+}
+
+.pesan.sukses {
+    background: #eef5ef;
+    border-color: var(--hijau);
+    color: #245039;
+}
+
+.pesan.error {
+    background: #fbefee;
+    border-color: var(--merah);
+    color: #7d2626;
+}
+
+/* ---------- 4. TOMBOL DAN FORMULIR ---------- */
+
+.tombol {
+    display: inline-block;
+    padding: 9px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--garis);
+    background: var(--putih);
+    color: var(--tinta);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.tombol:hover {
+    background: #f6f2ea;
+}
+
+.tombol.utama {
+    background: var(--aksen);
+    border-color: var(--aksen);
+    color: #fff;
+    font-weight: 600;
+}
+
+.tombol.utama:hover {
+    background: #9d4725;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #4a443b;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid #d5cdc0;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--putih);
+    color: var(--tinta);
+}
+
+input:focus,
+select:focus {
+    outline: 2px solid #e6c9b8;
+    outline-offset: 0;
+    border-color: var(--aksen);
+}
+
+.baris-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.hitung-otomatis {
+    background: #f6f2ea;
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--tinta-lemah);
+    margin: 14px 0;
+}
+
+.hitung-otomatis strong {
+    color: var(--tinta);
+    font-variant-numeric: tabular-nums;
+}
+
+.peringatan {
+    background: #fdf6e8;
+    border-left: 4px solid #c9962e;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.pil-barang {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0ebe2;
+    font-size: 14px;
+}
+
+.pil-barang:last-child {
+    border-bottom: none;
+}
+
+.pil-barang input[type="number"] {
+    width: 80px;
+    flex: none;
+}
+
+.pil-barang .nama-barang {
+    flex: 1;
+}
+
+.pil-barang .stok-info {
+    font-size: 12px;
+    color: var(--tinta-lemah);
+    min-width: 90px;
+    text-align: right;
+}
+
+/* ---------- 5. HALAMAN LOGIN ---------- */
+
+.halaman-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+}
+
+.kartu-login {
+    background: var(--putih);
+    border: 1px solid var(--garis);
+    border-radius: 8px;
+    padding: 34px 32px;
+    width: 100%;
+    max-width: 360px;
+}
+
+.kartu-login .logo {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--aksen);
+    letter-spacing: -1px;
+    margin-bottom: 4px;
+}
+
+.subjudul {
+    margin: 0 0 24px;
+    font-size: 13px;
+    color: var(--tinta-lemah);
+    line-height: 1.5;
+}
+
+.kartu-login label {
+    margin-top: 14px;
+}
+
+.kartu-login .tombol {
+    width: 100%;
+    margin-top: 20px;
+    padding: 11px;
+}
+
+.bantuan {
+    margin: 22px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--garis);
+    font-size: 12px;
+    color: var(--tinta-lemah);
+    line-height: 1.6;
+}
+
+/* ---------- 6. LAYAR KECIL ---------- */
+
+@media (max-width: 640px) {
+    .header {
+        padding: 0 16px;
+        gap: 8px;
+    }
+
+    .menu {
+        order: 3;
+        width: 100%;
+    }
+
+    .menu a {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .isi {
+        padding: 20px 16px 40px;
+    }
+
+    .judul-halaman {
+        font-size: 21px;
+    }
+
+    .kartu {
+        padding: 16px;
+        overflow-x: auto;
+    }
+
+    .kotak-angka .nilai {
+        font-size: 19px;
+    }
+}

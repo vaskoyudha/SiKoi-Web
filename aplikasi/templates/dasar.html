@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ judul }} - SiKoi</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">SiKoi</div>
+
+    <nav class="menu">
+        {% if jabatan == 'Owner' %}
+            <a href="/" class="{{ 'aktif' if menu == 'dashboard' else '' }}">Dashboard</a>
+        {% endif %}
+
+        <a href="/penjualan" class="{{ 'aktif' if menu == 'penjualan' else '' }}">Penjualan</a>
+        <a href="/pembelian" class="{{ 'aktif' if menu == 'pembelian' else '' }}">Pembelian</a>
+
+        {% if jabatan == 'Owner' %}
+            <a href="/kas" class="{{ 'aktif' if menu == 'kas' else '' }}">Kas</a>
+            <a href="/penyesuaian" class="{{ 'aktif' if menu == 'penyesuaian' else '' }}">Penyesuaian</a>
+            <a href="/jurnal" class="{{ 'aktif' if menu == 'jurnal' else '' }}">Jurnal</a>
+            <a href="/laporan" class="{{ 'aktif' if menu == 'laporan' else '' }}">Laporan</a>
+            <a href="/data" class="{{ 'aktif' if menu == 'data' else '' }}">Data</a>
+        {% endif %}
+    </nav>
+
+    <div class="pengguna">
+        {{ nama }}
+        <span class="badge">{{ jabatan }}</span>
+        <a href="/keluar">Keluar</a>
+    </div>
+</header>
+
+<main class="isi">
+    <h1 class="judul-halaman">{{ judul }}</h1>
+
+    {% if pesan %}
+        <div class="pesan {{ jenis_pesan }}">{{ pesan }}</div>
+    {% endif %}
+
+    {{! isi_halaman }}
+</main>
+
+<footer style="max-width:1120px; margin:0 auto; padding:0 24px 40px;
+               color:#6d665c; font-size:12px;">
+    SiKoi &middot; Sistem Informasi Akuntansi Budidaya Ikan Koi &middot;
+    data contoh Oktober 2026
+</footer>
+
+</body>
+</html>

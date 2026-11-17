@@ -1,0 +1,91 @@
+<form method="post" class="kartu">
+    <h2>Catat kas</h2>
+
+    <div class="baris-form">
+        <div>
+            <label for="jenis">Jenis</label>
+            <select name="jenis" id="jenis" onchange="gantiJenis()">
+                <option value="keluar">Kas keluar (beban)</option>
+                <option value="masuk">Kas masuk (setoran modal)</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="tanggal">Tanggal</label>
+            <input type="date" name="tanggal" id="tanggal" value="{{ hari_ini }}" required>
+        </div>
+
+        <div id="kotak-beban">
+            <label for="akun_beban_id">Beban untuk</label>
+            <select name="akun_beban_id" id="akun_beban_id">
+                {% for a in akun_beban %}
+                    <option value="{{ a.id }}">{{ a.nama }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="akun_kas_id">Kas / bank</label>
+            <select name="akun_kas_id" id="akun_kas_id">
+                <option value="{{ akun_kas }}">Kas (tunai)</option>
+                <option value="{{ akun_bank }}">Bank (transfer)</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="jumlah">Jumlah (Rp)</label>
+            <input type="number" name="jumlah" id="jumlah"
+                   step="1000" min="1" placeholder="375000" required>
+        </div>
+
+        <div style="grid-column: 1 / -1;">
+            <label for="keterangan">Keterangan</label>
+            <input type="text" name="keterangan" id="keterangan"
+                   placeholder="Contoh: retribusi 3 kolam ke Dinas Perikanan" required>
+        </div>
+    </div>
+
+    <button type="submit" class="tombol utama">Simpan</button>
+</form>
+
+<div class="kartu">
+    <h2>Catatan terakhir</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tanggal</th>
+                <th>Bukti</th>
+                <th>Jenis</th>
+                <th>Keterangan</th>
+                <th class="angka">Jumlah</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if not catatan %}
+                <tr><td colspan="5" class="lemah">Belum ada catatan.</td></tr>
+            {% endif %}
+
+            {% for c in catatan %}
+                {# Kas masuk: uang bertambah (debit kas). #}
+                <tr>
+                    <td>{{ tanggal(c.tanggal) }}</td>
+                    <td class="lemah">{{ c.no_bukti }}</td>
+                    <td>{{ 'Kas masuk' if c.debit_kas > 0 else 'Kas keluar' }}</td>
+                    <td class="lemah">{{ c.keterangan }}</td>
+                    <td class="angka">
+                        {{ '+' if c.debit_kas > 0 else '-' }}{{ angka(c.debit_kas if c.debit_kas > 0 else c.kredit_kas) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function gantiJenis() {
+    const jenis = document.getElementById('jenis').value;
+    document.getElementById('kotak-beban').style.display =
+        jenis === 'masuk' ? 'none' : 'block';
+}
+</script>

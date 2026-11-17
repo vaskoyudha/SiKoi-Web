@@ -1,0 +1,170 @@
+{# ---------- Stok sebelum menjual ---------- #}
+<div class="kartu">
+    <h2>Stok siap jual</h2>
+
+    <p class="lemah" style="font-size:13px; margin-top:-6px;">
+        Ikan dijual <strong>per ekor</strong>, dan harganya adalah kesepakatan
+        dengan pembeli. Kolom "harga acuan" hanya pembanding — bukan patokan.
+        Harga jual selalu kamu isi sendiri di formulir di bawah.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Kode</th>
+                <th>Jenis</th>
+                <th class="angka">Stok</th>
+                <th class="angka">HPP / ekor</th>
+                <th class="angka">Harga jual acuan</th>
+                <th class="angka">Berat / ekor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in ikan %}
+                <tr>
+                    <td class="lemah">{{ b.kode }}</td>
+                    <td>{{ b.nama }}</td>
+                    <td class="angka {{ 'tidak-seimbang' if b.stok <= b.stok_minimum else '' }}">
+                        {{ b.stok }} ekor
+                    </td>
+                    <td class="angka">{{ angka(b.hpp) }}</td>
+                    <td class="angka">{{ angka(b.harga_jual) }}</td>
+                    <td class="angka lemah">{{ desimal(b.berat) }} kg</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{# ---------- Formulir penjualan ---------- #}
+<form method="post" class="kartu">
+    <h2>Penjualan baru</h2>
+
+    <div class="baris-form">
+        <div>
+            <label for="tanggal">Tanggal</label>
+            <input type="date" name="tanggal" id="tanggal" value="{{ hari_ini }}" required>
+        </div>
+
+        <div>
+            <label for="pelanggan_id">Pembeli</label>
+            <select name="pelanggan_id" id="pelanggan_id" required>
+                {% for p in pelanggan %}
+                    <option value="{{ p.id }}">{{ p.nama }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="akun_kas_id">Uang masuk ke</label>
+            <select name="akun_kas_id" id="akun_kas_id">
+                <option value="{{ akun_kas }}">Kas (tunai)</option>
+                <option value="{{ akun_bank }}">Bank (transfer)</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="cara_kirim">Pengiriman</label>
+            <select name="cara_kirim" id="cara_kirim" onchange="hitungUlang()">
+                <option value="ambil">Ambil sendiri di kolam</option>
+                <option value="kirim">Dikirim</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="zona">Zona kirim</label>
+            <select name="zona" id="zona" onchange="hitungUlang()">
+                <option value="dekat">Dekat (dalam kota)</option>
+                <option value="sedang">Sedang</option>
+                <option value="jauh">Jauh (luar kota)</option>
+            </select>
+        </div>
+    </div>
+
+    <h2 style="margin-top:24px;">Ikan yang dijual</h2>
+
+    {% for b in ikan %}
+        <div class="pil-barang">
+            <span class="nama-barang">
+                {{ b.nama }}
+                <br><small class="lemah">sisa {{ b.stok }} ekor</small>
+            </span>
+
+            <label style="margin:0; font-weight:400;">
+                <span class="lemah" style="font-size:12px;">Jumlah</span>
+                <input type="number" min="0" max="{{ b.stok }}" value="0"
+                       name="qty_{{ b.id }}"
+                       data-berat="{{ b.berat }}"
+                       onchange="hitungUlang()" oninput="hitungUlang()">
+            </label>
+
+            <label style="margin:0; font-weight:400;">
+                <span class="lemah" style="font-size:12px;">
+                    Harga deal / ekor <strong>(isi manual)</strong>
+                </span>
+                <input type="number" step="1000" min="0"
+                       value=""
+                       placeholder="0"
+                       name="harga_{{ b.id }}"
+                       class="input-harga"
+                       onchange="hitungUlang()" oninput="hitungUlang()">
+                <small class="lemah" style="font-size:11px;">
+                    acuan {{ rupiah(b.harga_jual) }}
+                </small>
+            </label>
+        </div>
+    {% endfor %}
+
+    <div class="baris-form" style="margin-top:18px;">
+        <div style="grid-column: 1 / -1;">
+            <label for="keterangan">Keterangan (boleh kosong)</label>
+            <input type="text" name="keterangan" id="keterangan"
+                   placeholder="Contoh: pembeli langganan dari Ungaran">
+        </div>
+    </div>
+
+    <div class="hitung-otomatis">
+        Total ikan: <strong id="total-ikan">0</strong> ekor &nbsp;|&nbsp;
+        Berat paket: <strong id="total-berat">0,00</strong> kg &nbsp;|&nbsp;
+        Nilai jual: <strong id="total-jual">Rp0</strong> &nbsp;|&nbsp;
+        Ongkir: <strong id="total-ongkir">Rp0</strong> &nbsp;|&nbsp;
+        <strong>Ditagihkan: <span id="total-tagih">Rp0</span></strong>
+    </div>
+
+    <button type="submit" class="tombol utama">Simpan penjualan</button>
+</form>
+
+<script>
+// Hitungan langsung di browser. Angka final tetap dihitung di Python.
+function hitungUlang() {
+    let totalIkan = 0;
+    let totalBerat = 0;
+    let totalJual = 0;
+
+    document.querySelectorAll('input[name^="qty_"]').forEach(function (input) {
+        const qty = parseInt(input.value) || 0;
+        const berat = parseFloat(input.dataset.berat) || 0;
+        const harga = parseInt(input.closest('.pil-barang')
+                                 .querySelector('.input-harga').value) || 0;
+
+        totalIkan += qty;
+        totalBerat += qty * berat;
+        totalJual += qty * harga;
+    });
+
+    const caraKirim = document.getElementById('cara_kirim').value;
+    const zona = document.getElementById('zona').value;
+    const tarif = { dekat: 5000, sedang: 10000, jauh: 15000 };
+
+    let ongkir = 0;
+    if (caraKirim === 'kirim' && totalBerat <= 3) {
+        ongkir = tarif[zona] || 0;
+    }
+
+    document.getElementById('total-ikan').textContent = totalIkan;
+    document.getElementById('total-berat').textContent = totalBerat.toFixed(2).replace('.', ',');
+    document.getElementById('total-jual').textContent = 'Rp' + totalJual.toLocaleString('id-ID');
+    document.getElementById('total-ongkir').textContent = 'Rp' + ongkir.toLocaleString('id-ID');
+    document.getElementById('total-tagih').textContent = 'Rp' + (totalJual + ongkir).toLocaleString('id-ID');
+}
+</script>

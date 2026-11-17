@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: sikoi
+    runtime: python
+    plan: free
+    buildCommand: "echo tidak perlu build"
+    startCommand: "bash start.sh"

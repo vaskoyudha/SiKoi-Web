@@ -1,0 +1,49 @@
+{# Halaman login. Tidak memakai dasar.html karena tampilannya berbeda. #}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Masuk - SiKoi</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="halaman-login">
+
+<div class="kartu-login">
+    <div class="logo">SiKoi</div>
+    <p class="subjudul">Sistem Informasi Akuntansi<br>Budidaya Ikan Koi</p>
+
+    {% if error %}
+        <div class="pesan error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+        <label for="nama">Nama</label>
+        <select name="nama" id="nama" required>
+            {% for p in daftar %}
+                <option value="{{ p.nama }}">{{ p.nama }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="jabatan">Jabatan</label>
+        <select name="jabatan" id="jabatan" required>
+            <option value="Owner">Owner</option>
+            <option value="Karyawan">Karyawan</option>
+        </select>
+
+        <label for="pin">PIN</label>
+        <input type="password" name="pin" id="pin"
+               placeholder="4 angka" maxlength="4" required>
+
+        <button type="submit" class="tombol utama">Masuk</button>
+    </form>
+
+    <p class="bantuan">
+        Contoh akun:<br>
+        Owner &rarr; Pak Hadi / PIN 1234<br>
+        Karyawan &rarr; Mas Tono / PIN 5678
+    </p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+{# ---------- Neraca saldo ---------- #}
+<div class="kartu">
+    <h2>Neraca saldo</h2>
+    <p class="lemah" style="font-size:13px; margin-top:-6px;">
+        Daftar saldo semua akun. Kalau total debit sama dengan total kredit,
+        pembukuan seimbang.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Akun</th>
+                <th>Kelompok</th>
+                <th class="angka">Debit</th>
+                <th class="angka">Kredit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in ns %}
+                <tr>
+                    <td class="lemah">{{ a.no_akun }}</td>
+                    <td>{{ a.nama }}</td>
+                    <td class="lemah">{{ a.kelompok }}</td>
+                    <td class="angka">{{ angka(a.debit) if a.debit else '' }}</td>
+                    <td class="angka">{{ angka(a.kredit) if a.kredit else '' }}</td>
+                </tr>
+            {% endfor %}
+            <tr class="total">
+                <td colspan="3">Total</td>
+                <td class="angka">{{ angka(total_debit) }}</td>
+                <td class="angka">{{ angka(total_kredit) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top:14px;">
+        {% if total_debit == total_kredit %}
+            <span class="seimbang">&#10003; SEIMBANG</span>
+        {% else %}
+            <span class="tidak-seimbang">&#10007; TIDAK SEIMBANG</span>
+        {% endif %}
+        <span class="lemah"> &mdash; selisih
+            {{ rupiah(abs(total_debit - total_kredit)) }}</span>
+    </p>
+</div>
+
+{# ---------- Stok opname ---------- #}
+<form method="post" class="kartu">
+    <h2>Stok opname (ikan mati)</h2>
+    <p class="lemah" style="font-size:13px; margin-top:-6px;">
+        Ikan yang mati dicatat di sini. Sistem otomatis membuat jurnal:
+        Beban Kerugian Ikan Mati (debit) dan Persediaan Ikan Koi (kredit).
+    </p>
+
+    <div class="baris-form">
+        <div>
+            <label for="tanggal">Tanggal opname</label>
+            <input type="date" name="tanggal" id="tanggal" value="{{ hari_ini }}" required>
+        </div>
+
+        <div>
+            <label for="barang_id">Jenis ikan</label>
+            <select name="barang_id" id="barang_id">
+                {% for b in ikan %}
+                    <option value="{{ b.id }}">{{ b.nama }} (stok {{ b.stok }} ekor)</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="qty_hilang">Jumlah mati (ekor)</label>
+            <input type="number" name="qty_hilang" id="qty_hilang" min="1" required>
+        </div>
+
+        <div>
+            <label for="keterangan">Keterangan</label>
+            <input type="text" name="keterangan" id="keterangan" value="Ikan mati">
+        </div>
+    </div>
+
+    <button type="submit" class="tombol">Simpan opname</button>
+</form>
+
+{# ---------- Buku jurnal ---------- #}
+<div class="kartu">
+    <h2>Buku jurnal (40 baris terakhir)</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tanggal</th>
+                <th>Bukti</th>
+                <th>Akun</th>
+                <th>Keterangan</th>
+                <th class="angka">Debit</th>
+                <th class="angka">Kredit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for j in jurnal %}
+                <tr>
+                    <td>{{ tanggal(j.tanggal) }}</td>
+                    <td class="lemah">{{ j.no_bukti }}</td>
+                    <td><span class="lemah">{{ j.no_akun }}</span> {{ j.nama_akun }}</td>
+                    <td class="lemah">{{ j.keterangan }}</td>
+                    <td class="angka">{{ angka(j.debit) if j.debit else '' }}</td>
+                    <td class="angka">{{ angka(j.kredit) if j.kredit else '' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

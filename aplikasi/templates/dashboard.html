@@ -1,0 +1,116 @@
+{# ---------- Kotak angka utama ---------- #}
+<div class="grid-angka">
+    <div class="kotak-angka">
+        <div class="label">Stok ikan</div>
+        <div class="nilai">{{ angka(jumlah_ekor) }} ekor</div>
+        <div class="catatan">nilai {{ rupiah(total_nilai) }}</div>
+    </div>
+
+    <div class="kotak-angka">
+        <div class="label">Penjualan koi</div>
+        <div class="nilai">{{ angka(laba.penjualan_koi) }}</div>
+        <div class="catatan">+ ongkir {{ rupiah(laba.pendapatan_ongkir) }}</div>
+    </div>
+
+    <div class="kotak-angka">
+        <div class="label">Laba bersih</div>
+        <div class="nilai">{{ akun(laba.laba_bersih) }}</div>
+        <div class="catatan">penjualan dikurangi HPP dan beban</div>
+    </div>
+
+    <div class="kotak-angka">
+        <div class="label">Kas + bank</div>
+        <div class="nilai">{{ angka(kas_bank) }}</div>
+        <div class="catatan">uang yang tersedia</div>
+    </div>
+</div>
+
+{# ---------- Peringatan ---------- #}
+<div class="kartu">
+    <h2>Pengingat hari ini</h2>
+
+    {% if peringatan %}
+        <ul style="margin:0; padding-left:20px;">
+            {% for teks in peringatan %}
+                <li style="margin-bottom:6px;">{{ teks }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="lemah" style="margin:0;">Semua aman. Tidak ada yang perlu dikerjakan.</p>
+    {% endif %}
+</div>
+
+{# ---------- Ringkasan ---------- #}
+<div class="kartu">
+    <h2>Ringkasan usaha</h2>
+    <table>
+        <tbody>
+            <tr>
+                <td>Total stok ikan koi</td>
+                <td class="angka">{{ angka(jumlah_ekor) }} ekor
+                    ({{ rupiah(total_nilai) }})</td>
+            </tr>
+            <tr>
+                <td>Total penjualan</td>
+                <td class="angka">{{ rupiah(laba.penjualan_koi + laba.pendapatan_ongkir) }}</td>
+            </tr>
+            <tr>
+                <td>Harga pokok penjualan (HPP)</td>
+                <td class="angka">({{ angka(laba.hpp) }})</td>
+            </tr>
+            <tr>
+                <td>Total beban</td>
+                <td class="angka">({{ angka(laba.beban) }})</td>
+            </tr>
+            <tr class="total">
+                <td>Laba bersih</td>
+                <td class="angka">{{ rupiah_akun(laba.laba_bersih) }}</td>
+            </tr>
+            <tr>
+                <td>Utang usaha</td>
+                <td class="angka">{{ rupiah(0) }}</td>
+            </tr>
+            <tr>
+                <td>Piutang usaha</td>
+                <td class="angka">{{ rupiah(0) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{# ---------- Stok per ukuran ---------- #}
+<div class="kartu">
+    <h2>Stok per ukuran</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Jenis</th>
+                <th class="angka">Stok</th>
+                <th class="angka">Minimum</th>
+                <th class="angka">HPP</th>
+                <th class="angka">Harga jual acuan</th>
+                <th class="angka">Margin per ekor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in persediaan %}
+                <tr>
+                    <td>{{ b.nama }}</td>
+                    <td class="angka {{ 'tidak-seimbang' if b.stok <= b.stok_minimum else '' }}">
+                        {{ b.stok }}
+                    </td>
+                    <td class="angka lemah">{{ b.stok_minimum }}</td>
+                    <td class="angka">{{ angka(b.hpp) }}</td>
+                    <td class="angka">{{ angka(b.harga_jual) if b.harga_jual > 0 else '-' }}</td>
+                    <td class="angka">{{ angka(b.harga_jual - b.hpp) if b.harga_jual > 0 else '-' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <a href="/penjualan" class="tombol utama">+ Penjualan baru</a>
+    <a href="/pembelian" class="tombol">+ Pembelian baru</a>
+    <a href="/laporan" class="tombol">Cetak laporan</a>
+</div>
